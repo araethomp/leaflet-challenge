@@ -16,6 +16,18 @@ function makeFeatures(earthquakeInfo) {
     }
     // GeoJSON layer that holds the features array on the earthquakeInfo object then run the eachFeature function for each piece of data
     const earthquakes = L.geoJSON(earthquakeInfo, {
-        eachFeature: eachFeature,
+        eachFeature: eachFeature
     });
+
+    const mags = L.geoJSON(earthquakeInfo, {
+        eachFeature: eachFeature,
+        layerPoint: (feature, latlng) => {
+            return new L.Circle(latlng, {
+                radius: feature.properties.mag*20000, 
+                fillColor: "blue",
+                stroke: false
+            });
+        }
+    });
+    
 }
