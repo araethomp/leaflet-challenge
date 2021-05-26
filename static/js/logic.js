@@ -14,7 +14,7 @@ function createFeatures(earthquakeInfo) {
         layer.bindPopup("<h3>" + feature.properties.place +
         "</h3><hr><p>" + new Date(feature.properties.time) + "</p>" + feature.properties.mag + "</h3>");
     }
-    
+
     // GeoJSON layer that holds the features array on the earthquakeInfo object then run the eachFeature function for each piece of data
     const earthquakes = L.geoJSON(earthquakeInfo, {
         eachFeature: eachFeature
@@ -53,4 +53,27 @@ function createMap(earthquakes, mags) {
         accessToken: API_key
     });
 
+    // Create object to hold base layers
+    const baseMaps = {
+        "Street Map Layer": streetmapLayer,
+        "Dark Map Layer": darkmapLayer
+    };
+
+    // Create object to hold overlay layer
+    const overlayMaps = {
+        Earthquakes: earthquakes,
+        Magnitudes: mags
+    };
+
+    // Create map with streetmap layer and earthquake layers for the display on page load
+    const loadMap = L.map("map", {
+        center: [40, -98], 
+        zoom: 4,
+        layers: [streetmapLayer, earthquakes]
+    });
+
+    //  Create and add layer control, pass in baseMaps and overlayMaps
+    L.control.layers(baseMaps, overlayMaps, {
+        collapsed: false
+    }).addTo(loadMap);
 }
