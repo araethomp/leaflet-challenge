@@ -8,6 +8,23 @@ d3.json(queryUrl).then(data => {
     createFeatures(data.features);
 });
 
+// Organize and assign colors according to magnitude 
+function magsColor(colorSize) {
+    if (colorSize <= 1) {
+        return "Purple";
+    } else if (colorSize <= 2) {
+        return "Blue";
+    } else if (colorSize <= 3) {
+        return "Green";
+    } else if (colorSize <= 4) {
+        return "Yellow";
+    } else if (colorSize <= 5) {
+        return "Orange";
+    } else {
+        return "Red";
+    }
+};
+
 // Make function to run for each feature then give each feature a descriptive popup
 function createFeatures(earthquakeInfo) {
     function eachFeature(feature, layer) {
