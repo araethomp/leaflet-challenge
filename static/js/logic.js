@@ -5,15 +5,16 @@ const queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/sign
 d3.json(queryUrl).then(data => {
     console.log(data);
     console.log(d3.extent(data.features.map(d => d.properties.mag)))
-    makeFeatures(data.features);
+    createFeatures(data.features);
 });
 
 // Make function to run for each feature then give each feature a descriptive popup
-function makeFeatures(earthquakeInfo) {
+function createFeatures(earthquakeInfo) {
     function eachFeature(feature, layer) {
-        layer.bindPopup("<h3>" + feature.properties.title +
-        "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
+        layer.bindPopup("<h3>" + feature.properties.place +
+        "</h3><hr><p>" + new Date(feature.properties.time) + "</p>" + feature.properties.mag + "</h3>");
     }
+    
     // GeoJSON layer that holds the features array on the earthquakeInfo object then run the eachFeature function for each piece of data
     const earthquakes = L.geoJSON(earthquakeInfo, {
         eachFeature: eachFeature
@@ -45,7 +46,7 @@ function createMap(earthquakes, mags) {
         accessToken: API_key
     });
 
-    const darkmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+    const darkmapLayer = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
         attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
         maxZoom: 18,
         id: "dark-v10",
