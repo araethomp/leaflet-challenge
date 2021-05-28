@@ -95,3 +95,6 @@ function magsColor(d) {
 function magSize(value) {
     return value*20000
 };
+
+// Reference Citation:
+// University of Oregon/Trilogy Data Analysis Bootcamp (2021) 17-Leaflet/01-Activities/10-Stu_Geo-Json [Class Activity]. Private class Github repo.
