@@ -22,12 +22,51 @@ function createFeatures(earthquakeData) {
     }
 });
 
-// Add earthquake layer to createMap 
+// Add earthquakes to createMap 
 createMap(earthquakes);
 }
 
-
+// Create map and add layers 
+function createMap(earthquakes) {
     
+    // Bring in layers
+    let lightmapLayer = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+        maxZoom: 18,
+        id: "mapbox/light-v10",
+        accessToken: API_KEY
+    });
+
+    let darkmapLayer = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+        maxZoom: 18,
+        id: "mapbox/dark-v10",
+        accessToken: API_KEY
+    });
+
+    // Create base layer object to hold layers
+    let baseMaps = {
+        "Light Map Layer": lightmapLayer,
+        "Dark Map Layer": darkmapLayer
+    };
+
+    // Create overlay object to hold overlays
+    let overlayMaps = {
+        "Earthquakes": earthquakes 
+    }
+
+    // Create map, assign layers and start points
+    const earthquakeMap = L.map("map", {
+        center: [37.09, -95.71],
+        zoom: 3,
+        layers: [lightmapLayer, earthquakes]
+    });
+
+    // Add layer control
+    L.control.layers(baseMaps, overlayMaps, {
+        collapsed: false
+    }).addTo(earthquakeMap);
+}
 // Organize and assign colors according to magnitude 
 function magsColor(d) {
     if (d <= 1) {
